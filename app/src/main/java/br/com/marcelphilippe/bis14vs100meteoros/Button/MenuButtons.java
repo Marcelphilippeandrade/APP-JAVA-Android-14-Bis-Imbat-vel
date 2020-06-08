@@ -1,9 +1,12 @@
 package br.com.marcelphilippe.bis14vs100meteoros.Button;
 
 import org.cocos2d.layers.CCLayer;
+import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.transitions.CCFadeTransition;
 import org.cocos2d.types.CGPoint;
 
 import br.com.marcelphilippe.bis14vs100meteoros.config.Assets;
+import br.com.marcelphilippe.bis14vs100meteoros.game.scenes.GameScene;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.ButtonDelegate;
 
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenHeight;
@@ -55,6 +58,7 @@ public class MenuButtons extends CCLayer implements ButtonDelegate {
     public void buttonClicked(Button sender) {
         if (sender.equals(this.playButton)) {
             System.out.println("Button clicked: Play");
+            CCDirector.sharedDirector().replaceScene(CCFadeTransition.transition(1.0f, GameScene.createGame()));
         }
 
         if (sender.equals(this.highscoredButton)) {
