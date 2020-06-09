@@ -2,11 +2,9 @@ package br.com.marcelphilippe.bis14vs100meteoros.Button;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.types.CGPoint;
-
 import br.com.marcelphilippe.bis14vs100meteoros.config.Assets;
 import br.com.marcelphilippe.bis14vs100meteoros.game.scenes.GameScene;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.ButtonDelegate;
-
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenResolution;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenWidth;
 

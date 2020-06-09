@@ -1,7 +1,6 @@
 package br.com.marcelphilippe.bis14vs100meteoros.Button;
 
 import android.view.MotionEvent;
-
 import org.cocos2d.events.CCTouchDispatcher;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCDirector;

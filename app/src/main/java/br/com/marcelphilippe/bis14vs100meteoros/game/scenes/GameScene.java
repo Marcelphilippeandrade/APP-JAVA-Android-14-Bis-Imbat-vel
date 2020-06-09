@@ -1,16 +1,10 @@
 package br.com.marcelphilippe.bis14vs100meteoros.game.scenes;
 
-import org.cocos2d.actions.instant.CCCallFunc;
-import org.cocos2d.actions.interval.CCFadeOut;
-import org.cocos2d.actions.interval.CCScaleBy;
-import org.cocos2d.actions.interval.CCSequence;
-import org.cocos2d.actions.interval.CCSpawn;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -22,6 +16,7 @@ import br.com.marcelphilippe.bis14vs100meteoros.interfaces.MeteorsEngineDelegate
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.ShootEngineDelegate;
 import br.com.marcelphilippe.bis14vs100meteoros.objects.Meteor;
 import br.com.marcelphilippe.bis14vs100meteoros.objects.Player;
+import br.com.marcelphilippe.bis14vs100meteoros.objects.Score;
 import br.com.marcelphilippe.bis14vs100meteoros.objects.Shoot;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenHeight;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenResolution;
@@ -38,6 +33,8 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
     private CCLayer shootsLayer;
     private ArrayList shootsArray;
     private List playersArray;
+    private CCLayer scoreLayer;
+    private Score score;
 
     private GameScene() {
         this.background = new ScreenBackground(Assets.BACKGROUND);
@@ -53,6 +50,9 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
         this.shootsLayer = CCLayer.node();
         this.addChild(this.shootsLayer);
         this.setIsTouchEnabled(true);
+
+        this.scoreLayer = CCLayer.node();
+        this.addChild(this.scoreLayer);
 
         GameButtons gameButtonsLayer = GameButtons.gameButtons();
         gameButtonsLayer.setDelegate(this);
@@ -101,9 +101,12 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
     }
 
     private void addGameObjects() {
+
+        // Meteoros
         this.meteorsArray = new ArrayList();
         this.meteorsEngine = new MeteorsEngine();
 
+        // player
         this.player = new Player();
         this.playerLayer.addChild(this.player);
 
@@ -112,6 +115,10 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
 
         this.playersArray = new ArrayList();
         this.playersArray.add(this.player);
+
+        // placar
+        this.score = new Score();
+        this.scoreLayer.addChild(this.score);
     }
 
     public void onEnter() {
@@ -188,5 +195,11 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
     public void meteoroHit(CCSprite meteor, CCSprite shoot) {
         ((Meteor) meteor).shooted();
         ((Shoot) shoot).explode();
+        this.score.increase();
+    }
+
+    public void playerHit(CCSprite meteor, CCSprite player){
+        ((Meteor) meteor).shooted();
+        ((Player) player).explode();
     }
 }

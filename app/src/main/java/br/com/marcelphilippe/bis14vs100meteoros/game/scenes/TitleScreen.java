@@ -5,7 +5,6 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
-
 import br.com.marcelphilippe.bis14vs100meteoros.Button.MenuButtons;
 import br.com.marcelphilippe.bis14vs100meteoros.config.Assets;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenHeight;
