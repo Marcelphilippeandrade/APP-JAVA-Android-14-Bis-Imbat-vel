@@ -9,7 +9,6 @@ public class Player extends CCSprite {
 
     float positionX = screenWidth()/2;
     float positionY = 50;
-
     private ShootEngineDelegate delegate;
 
     public Player(){
