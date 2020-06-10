@@ -2,7 +2,9 @@ package br.com.marcelphilippe.bis14vs100meteoros.game.scenes;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
+import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 import java.lang.reflect.InvocationTargetException;
@@ -10,6 +12,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import br.com.marcelphilippe.bis14vs100meteoros.Button.GameButtons;
+import br.com.marcelphilippe.bis14vs100meteoros.R;
 import br.com.marcelphilippe.bis14vs100meteoros.config.Assets;
 import br.com.marcelphilippe.bis14vs100meteoros.engines.MeteorsEngine;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.MeteorsEngineDelegate;
@@ -59,6 +62,7 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
         this.addChild(gameButtonsLayer);
 
         this.addGameObjects();
+        preloadCache();
     }
 
     public static CCScene createGame() {
@@ -201,5 +205,11 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
     public void playerHit(CCSprite meteor, CCSprite player){
         ((Meteor) meteor).shooted();
         ((Player) player).explode();
+    }
+
+    private void preloadCache() {
+        SoundEngine.sharedEngine().preloadEffect(CCDirector.sharedDirector().getActivity(), R.raw.shoot);
+        SoundEngine.sharedEngine().preloadEffect(CCDirector.sharedDirector().getActivity(), R.raw.bang);
+        SoundEngine.sharedEngine().preloadEffect(CCDirector.sharedDirector().getActivity(), R.raw.over);
     }
 }

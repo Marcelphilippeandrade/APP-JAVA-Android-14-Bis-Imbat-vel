@@ -4,7 +4,11 @@ import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCScaleBy;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.actions.interval.CCSpawn;
+import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
+
+import br.com.marcelphilippe.bis14vs100meteoros.R;
 import br.com.marcelphilippe.bis14vs100meteoros.config.Assets;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.ShootEngineDelegate;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenWidth;
@@ -12,7 +16,8 @@ import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.scr
 public class Player extends CCSprite {
 
     float positionX = screenWidth()/2;
-    float positionY = 50;
+    // Era 50; mas coloquie 100 para posicionar melhor o player na tela
+    float positionY = 100;
     private ShootEngineDelegate delegate;
 
     public Player(){
@@ -43,6 +48,8 @@ public class Player extends CCSprite {
     }
 
     public void explode() {
+        SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.over);
+
         // Para o agendamento
         this.unschedule("update");
 
