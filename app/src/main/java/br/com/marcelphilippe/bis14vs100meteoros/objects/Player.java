@@ -50,6 +50,8 @@ public class Player extends CCSprite {
     public void explode() {
         SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.over);
 
+        SoundEngine.sharedEngine().pauseSound();
+
         // Para o agendamento
         this.unschedule("update");
 
