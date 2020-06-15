@@ -38,8 +38,8 @@ public class GameButtons extends CCLayer implements ButtonDelegate {
         setButtonspPosition();
 
         // Adiciona os botões na tela
-        addChild(leftControl);
-        addChild(rightControl);
+        //addChild(leftControl);
+        //addChild(rightControl);
         addChild(shootButton);
     }
 

@@ -21,13 +21,17 @@ import br.com.marcelphilippe.bis14vs100meteoros.objects.Meteor;
 import br.com.marcelphilippe.bis14vs100meteoros.objects.Player;
 import br.com.marcelphilippe.bis14vs100meteoros.objects.Score;
 import br.com.marcelphilippe.bis14vs100meteoros.objects.Shoot;
+import br.com.marcelphilippe.bis14vs100meteoros.screens.FinalScreen;
+import br.com.marcelphilippe.bis14vs100meteoros.screens.BackgroundScreen;
+import br.com.marcelphilippe.bis14vs100meteoros.screens.GameOverScreen;
+
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenHeight;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenResolution;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenWidth;
 
 public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEngineDelegate {
 
-    private ScreenBackground background;
+    private BackgroundScreen background;
     private MeteorsEngine meteorsEngine;
     private CCLayer meteorsLayer;
     private List meteorsArray;
@@ -40,7 +44,7 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
     private Score score;
 
     private GameScene() {
-        this.background = new ScreenBackground(Assets.BACKGROUND);
+        this.background = new BackgroundScreen(Assets.BACKGROUND);
         this.background.setPosition(screenResolution(CGPoint.ccp(screenWidth() / 2.0f, screenHeight() / 2.0f)));
         this.addChild(this.background);
 
@@ -123,6 +127,7 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
 
         // placar
         this.score = new Score();
+        this.score.setDelegate(this);
         this.scoreLayer.addChild(this.score);
     }
 
@@ -130,6 +135,7 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
         super.onEnter();
         this.schedule("checkHits");
         this.startEngines();
+        this.startGame();
     }
 
     private void startEngines() {
@@ -206,11 +212,21 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
     public void playerHit(CCSprite meteor, CCSprite player){
         ((Meteor) meteor).shooted();
         ((Player) player).explode();
+        CCDirector.sharedDirector().replaceScene(new GameOverScreen().scene());
     }
 
     private void preloadCache() {
         SoundEngine.sharedEngine().preloadEffect(CCDirector.sharedDirector().getActivity(), R.raw.shoot);
         SoundEngine.sharedEngine().preloadEffect(CCDirector.sharedDirector().getActivity(), R.raw.bang);
         SoundEngine.sharedEngine().preloadEffect(CCDirector.sharedDirector().getActivity(), R.raw.over);
+    }
+
+    public void startGame() {
+        // Captura o acelerometro
+        player.catchAccelerometer();
+    }
+
+    public void startFinalScreen() {
+        CCDirector.sharedDirector().replaceScene(new FinalScreen().scene());
     }
 }

@@ -7,22 +7,30 @@ import org.cocos2d.actions.interval.CCSpawn;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.sound.SoundEngine;
-
+import org.cocos2d.types.CGPoint;
 import br.com.marcelphilippe.bis14vs100meteoros.R;
+import br.com.marcelphilippe.bis14vs100meteoros.calibrate.Accelerometer;
 import br.com.marcelphilippe.bis14vs100meteoros.config.Assets;
+import br.com.marcelphilippe.bis14vs100meteoros.interfaces.AccelerometerDelegate;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.ShootEngineDelegate;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenWidth;
 
-public class Player extends CCSprite {
+public class Player extends CCSprite implements AccelerometerDelegate {
 
     float positionX = screenWidth()/2;
     // Era 50; mas coloquie 100 para posicionar melhor o player na tela
     float positionY = 100;
     private ShootEngineDelegate delegate;
+    private Accelerometer accelerometer;
+    private float currentAccelX;
+    private float currentAccelY;
+
+    private static final double NOISE = 1;
 
     public Player(){
         super(Assets.NAVE);
         setPosition(positionX, positionY);
+        this.schedule("update");
     }
 
     public void setDelegate(ShootEngineDelegate delegate) {
@@ -63,5 +71,41 @@ public class Player extends CCSprite {
 
         // Roda os efeitos
         this.runAction(CCSequence.actions(s1));
+    }
+
+    public void catchAccelerometer() {
+        Accelerometer.sharedAccelerometer().catchAccelerometer();
+        this.accelerometer = Accelerometer.sharedAccelerometer();
+        this.accelerometer.setDelegate(this);
+    }
+
+    public void update(float dt) {
+        if(this.currentAccelX < -NOISE){
+            this.positionX++;
+        }
+
+        if(this.currentAccelX > NOISE){
+            this.positionX--;
+        }
+
+        if(this.currentAccelY < -NOISE){
+            this.positionY++;
+        }
+
+        if(this.currentAccelY > NOISE){
+            this.positionY--;
+        }
+
+        // Configura posicao do aviao
+        this.setPosition(CGPoint.ccp(this.positionX, this.positionY));
+    }
+
+    @Override
+    public void accelerometerDidAccelerate(float x, float y) {
+        System.out.println("X: " + x);
+        System.out.println("Y: " + y);
+
+        this.currentAccelX = x;
+        this.currentAccelY = y;
     }
 }

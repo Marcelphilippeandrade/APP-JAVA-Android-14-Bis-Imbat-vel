@@ -7,6 +7,8 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import br.com.marcelphilippe.bis14vs100meteoros.Button.MenuButtons;
 import br.com.marcelphilippe.bis14vs100meteoros.config.Assets;
+import br.com.marcelphilippe.bis14vs100meteoros.screens.BackgroundScreen;
+
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenHeight;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenResolution;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenWidth;
@@ -14,7 +16,7 @@ import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.scr
 
 public class TitleScreen extends CCLayer {
 
-    private ScreenBackground background;
+    private BackgroundScreen background;
 
     public CCScene scene() {
         CCScene scene = CCScene.node();
@@ -23,7 +25,7 @@ public class TitleScreen extends CCLayer {
     }
 
     public TitleScreen() {
-        this.background = new ScreenBackground(Assets.BACKGROUND);
+        this.background = new BackgroundScreen(Assets.BACKGROUND);
         this.background.setPosition(screenResolution(CGPoint.ccp(
                 screenWidth()/2.0f,
                 screenHeight()/2.0f

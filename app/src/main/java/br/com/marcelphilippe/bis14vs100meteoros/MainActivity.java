@@ -1,5 +1,7 @@
 package br.com.marcelphilippe.bis14vs100meteoros;
 
+import android.content.Context;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -10,6 +12,7 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
+import br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings;
 import br.com.marcelphilippe.bis14vs100meteoros.game.scenes.TitleScreen;
 
 public class MainActivity extends Activity {
@@ -29,12 +32,20 @@ public class MainActivity extends Activity {
         setContentView(glSurfaceView);
         CCDirector.sharedDirector().attachInView(glSurfaceView);
 
+        // configura o sensor
+        configSensorManager();
+
         // configura CCDirector
         CCDirector.sharedDirector().setScreenSize(320, 480);
 
         // abre tela principal
         CCScene scene = new TitleScreen().scene();
         CCDirector.sharedDirector().runWithScene(scene);
+    }
+
+    private void configSensorManager() {
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        DeviceSettings.setSensorManager(sensorManager);
     }
 }
 
