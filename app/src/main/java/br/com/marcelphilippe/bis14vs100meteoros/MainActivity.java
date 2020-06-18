@@ -13,7 +13,7 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
 import br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings;
-import br.com.marcelphilippe.bis14vs100meteoros.game.scenes.TitleScreen;
+import br.com.marcelphilippe.bis14vs100meteoros.screens.TitleScreen;
 
 public class MainActivity extends Activity {
 

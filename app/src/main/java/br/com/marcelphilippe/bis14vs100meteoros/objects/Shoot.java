@@ -11,6 +11,7 @@ import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import br.com.marcelphilippe.bis14vs100meteoros.R;
 import br.com.marcelphilippe.bis14vs100meteoros.config.Assets;
+import br.com.marcelphilippe.bis14vs100meteoros.control.Runner;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.ShootEngineDelegate;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenResolution;
 
@@ -28,8 +29,10 @@ public class Shoot extends CCSprite {
     }
 
     public void update(float dt) {
-        positionY += 2;
-        this.setPosition(screenResolution(CGPoint.ccp(positionX, positionY )));
+        if (Runner.check().isGamePlaying() && !Runner.check().isGamePaused()) {
+            positionY += 2;
+            this.setPosition(screenResolution(CGPoint.ccp(positionX, positionY)));
+        }
     }
 
     public void setDelegate(ShootEngineDelegate delegate) {

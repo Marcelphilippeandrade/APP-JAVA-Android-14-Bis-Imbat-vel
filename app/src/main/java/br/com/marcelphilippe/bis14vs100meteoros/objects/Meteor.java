@@ -12,6 +12,7 @@ import org.cocos2d.types.CGPoint;
 import java.util.Random;
 
 import br.com.marcelphilippe.bis14vs100meteoros.R;
+import br.com.marcelphilippe.bis14vs100meteoros.control.Runner;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.MeteorsEngineDelegate;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenHeight;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenResolution;
@@ -37,8 +38,11 @@ public class Meteor extends CCSprite {
     }
 
     public void update(float dt) {
-        y -= 1;
-        this.setPosition(screenResolution(CGPoint.ccp(x, y )));
+        // pause
+        if (Runner.check().isGamePlaying() && !Runner.check().isGamePaused()) {
+            y -= 1;
+            this.setPosition(screenResolution(CGPoint.ccp(x, y)));
+        }
     }
 
     public void shooted() {

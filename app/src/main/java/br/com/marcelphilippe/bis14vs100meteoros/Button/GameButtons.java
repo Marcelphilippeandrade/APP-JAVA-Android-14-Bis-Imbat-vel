@@ -5,6 +5,8 @@ import org.cocos2d.types.CGPoint;
 import br.com.marcelphilippe.bis14vs100meteoros.config.Assets;
 import br.com.marcelphilippe.bis14vs100meteoros.game.scenes.GameScene;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.ButtonDelegate;
+
+import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenHeight;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenResolution;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenWidth;
 
@@ -13,12 +15,8 @@ public class GameButtons extends CCLayer implements ButtonDelegate {
     private Button leftControl;
     private Button rightControl;
     private Button shootButton;
-
+    private Button pauseButton;
     private GameScene delegate;
-
-    public static GameButtons gameButtons() {
-        return new GameButtons();
-    }
 
     public GameButtons() {
         // Habilita o toque na tela
@@ -28,11 +26,13 @@ public class GameButtons extends CCLayer implements ButtonDelegate {
         this.leftControl = new Button(Assets.LEFTCONTROL);
         this.rightControl = new Button(Assets.RIGHTCONTROL);
         this.shootButton = new Button(Assets.SHOOTBUTTON);
+        this.pauseButton = new Button(Assets.PAUSE);
 
         // Configura as delegações
         this.leftControl.setDelegate(this);
         this.rightControl.setDelegate(this);
         this.shootButton.setDelegate(this);
+        this.pauseButton.setDelegate(this);
 
         // Configura posições
         setButtonspPosition();
@@ -41,6 +41,11 @@ public class GameButtons extends CCLayer implements ButtonDelegate {
         //addChild(leftControl);
         //addChild(rightControl);
         addChild(shootButton);
+        addChild(pauseButton);
+    }
+
+    public static GameButtons gameButtons() {
+        return new GameButtons();
     }
 
     private void setButtonspPosition() {
@@ -48,6 +53,7 @@ public class GameButtons extends CCLayer implements ButtonDelegate {
         leftControl.setPosition(screenResolution(CGPoint.ccp( 40 , 40 ))) ;
         rightControl.setPosition(screenResolution(CGPoint.ccp( 100 , 40 ))) ;
         shootButton.setPosition(screenResolution(CGPoint.ccp( screenWidth() -40 , 40 )));
+        pauseButton.setPosition(screenResolution(CGPoint.ccp(40, screenHeight() - 30 )));
     }
 
     public void setDelegate(GameScene gameScene) {
@@ -64,6 +70,9 @@ public class GameButtons extends CCLayer implements ButtonDelegate {
         }
         if (sender.equals(this.shootButton)) {
             this.delegate.shoot();
+        }
+        if (sender.equals(this.pauseButton)) {
+            this.delegate.pauseGameAndShowLayer();
         }
     }
 }

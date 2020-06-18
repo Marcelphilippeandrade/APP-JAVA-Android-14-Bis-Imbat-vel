@@ -1,4 +1,4 @@
-package br.com.marcelphilippe.bis14vs100meteoros.game.scenes;
+package br.com.marcelphilippe.bis14vs100meteoros.screens;
 
 
 import org.cocos2d.layers.CCLayer;

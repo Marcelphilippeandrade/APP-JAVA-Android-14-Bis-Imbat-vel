@@ -11,6 +11,7 @@ import org.cocos2d.types.CGPoint;
 import br.com.marcelphilippe.bis14vs100meteoros.R;
 import br.com.marcelphilippe.bis14vs100meteoros.calibrate.Accelerometer;
 import br.com.marcelphilippe.bis14vs100meteoros.config.Assets;
+import br.com.marcelphilippe.bis14vs100meteoros.control.Runner;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.AccelerometerDelegate;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.ShootEngineDelegate;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenWidth;
@@ -38,21 +39,27 @@ public class Player extends CCSprite implements AccelerometerDelegate {
     }
 
     public void shoot() {
-        delegate.createShoot(new Shoot(positionX, positionY));
+        if (Runner.check().isGamePlaying() && !Runner.check().isGamePaused()) {
+            delegate.createShoot(new Shoot(positionX, positionY));
+        }
     }
 
     public void moveLeft() {
-        if(positionX > 30){
-            positionX -= 10;
+        if (Runner.check().isGamePlaying() && !Runner.check().isGamePaused()){
+            if (positionX > 30) {
+                positionX -= 10;
+            }
+            setPosition(positionX, positionY);
         }
-        setPosition(positionX, positionY);
     }
 
     public void moveRight() {
-        if(positionX < screenWidth() - 30){
-            positionX += 10;
+        if (Runner.check().isGamePlaying() && !Runner.check().isGamePaused()) {
+            if (positionX < screenWidth() - 30) {
+                positionX += 10;
+            }
+            setPosition(positionX, positionY);
         }
-        setPosition(positionX, positionY);
     }
 
     public void explode() {
@@ -80,32 +87,36 @@ public class Player extends CCSprite implements AccelerometerDelegate {
     }
 
     public void update(float dt) {
-        if(this.currentAccelX < -NOISE){
-            this.positionX++;
-        }
+        if (Runner.check().isGamePlaying() && !Runner.check().isGamePaused()) {
+            if (this.currentAccelX < -NOISE) {
+                this.positionX++;
+            }
 
-        if(this.currentAccelX > NOISE){
-            this.positionX--;
-        }
+            if (this.currentAccelX > NOISE) {
+                this.positionX--;
+            }
 
-        if(this.currentAccelY < -NOISE){
-            this.positionY++;
-        }
+            if (this.currentAccelY < -NOISE) {
+                this.positionY++;
+            }
 
-        if(this.currentAccelY > NOISE){
-            this.positionY--;
-        }
+            if (this.currentAccelY > NOISE) {
+                this.positionY--;
+            }
 
-        // Configura posicao do aviao
-        this.setPosition(CGPoint.ccp(this.positionX, this.positionY));
+            // Configura posicao do aviao
+            this.setPosition(CGPoint.ccp(this.positionX, this.positionY));
+        }
     }
 
     @Override
     public void accelerometerDidAccelerate(float x, float y) {
-        System.out.println("X: " + x);
-        System.out.println("Y: " + y);
+        if (Runner.check().isGamePlaying() && !Runner.check().isGamePaused() ) {
+            System.out.println("X: " + x);
+            System.out.println("Y: " + y);
 
-        this.currentAccelX = x;
-        this.currentAccelY = y;
+            this.currentAccelX = x;
+            this.currentAccelY = y;
+        }
     }
 }

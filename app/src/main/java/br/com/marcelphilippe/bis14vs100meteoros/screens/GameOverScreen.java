@@ -8,7 +8,6 @@ import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import br.com.marcelphilippe.bis14vs100meteoros.Button.Button;
 import br.com.marcelphilippe.bis14vs100meteoros.config.Assets;
-import br.com.marcelphilippe.bis14vs100meteoros.game.scenes.TitleScreen;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.ButtonDelegate;
 
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenHeight;

@@ -14,8 +14,10 @@ import java.util.List;
 import br.com.marcelphilippe.bis14vs100meteoros.Button.GameButtons;
 import br.com.marcelphilippe.bis14vs100meteoros.R;
 import br.com.marcelphilippe.bis14vs100meteoros.config.Assets;
+import br.com.marcelphilippe.bis14vs100meteoros.control.Runner;
 import br.com.marcelphilippe.bis14vs100meteoros.engines.MeteorsEngine;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.MeteorsEngineDelegate;
+import br.com.marcelphilippe.bis14vs100meteoros.interfaces.PauseDelegate;
 import br.com.marcelphilippe.bis14vs100meteoros.interfaces.ShootEngineDelegate;
 import br.com.marcelphilippe.bis14vs100meteoros.objects.Meteor;
 import br.com.marcelphilippe.bis14vs100meteoros.objects.Player;
@@ -24,12 +26,13 @@ import br.com.marcelphilippe.bis14vs100meteoros.objects.Shoot;
 import br.com.marcelphilippe.bis14vs100meteoros.screens.FinalScreen;
 import br.com.marcelphilippe.bis14vs100meteoros.screens.BackgroundScreen;
 import br.com.marcelphilippe.bis14vs100meteoros.screens.GameOverScreen;
-
+import br.com.marcelphilippe.bis14vs100meteoros.screens.PauseScreen;
+import br.com.marcelphilippe.bis14vs100meteoros.screens.TitleScreen;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenHeight;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenResolution;
 import static br.com.marcelphilippe.bis14vs100meteoros.config.DeviceSettings.screenWidth;
 
-public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEngineDelegate {
+public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEngineDelegate, PauseDelegate {
 
     private BackgroundScreen background;
     private MeteorsEngine meteorsEngine;
@@ -42,6 +45,8 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
     private List playersArray;
     private CCLayer scoreLayer;
     private Score score;
+    private PauseScreen pauseScreen;
+    private CCLayer layerTop;
 
     private GameScene() {
         this.background = new BackgroundScreen(Assets.BACKGROUND);
@@ -60,6 +65,9 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
 
         this.scoreLayer = CCLayer.node();
         this.addChild(this.scoreLayer);
+
+        this.layerTop = CCLayer.node();
+        this.addChild(this.layerTop);
 
         GameButtons gameButtonsLayer = GameButtons.gameButtons();
         gameButtonsLayer.setDelegate(this);
@@ -133,6 +141,15 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
 
     public void onEnter() {
         super.onEnter();
+
+        // Configura o status do jogo
+        Runner.check().setIsGamePlaying(true);
+        Runner.check().setIsGamePaused(false);
+
+        // pause
+        SoundEngine.sharedEngine().setEffectsVolume(1f);
+        SoundEngine.sharedEngine().setSoundVolume(1f);
+
         this.schedule("checkHits");
         this.startEngines();
         this.startGame();
@@ -228,5 +245,45 @@ public class GameScene extends CCLayer implements MeteorsEngineDelegate, ShootEn
 
     public void startFinalScreen() {
         CCDirector.sharedDirector().replaceScene(new FinalScreen().scene());
+    }
+
+    @Override
+    public void resumeGame() {
+
+        if (Runner.check().isGamePaused() || !Runner.check().isGamePlaying()) {
+            // Continua o jogo
+            this.pauseScreen = null;
+            Runner.setIsGamePaused(false);
+            this.setIsTouchEnabled(true);
+            SoundEngine.sharedEngine().playSound(CCDirector.sharedDirector().getActivity(), R.raw.music, true);
+        }
+    }
+
+    @Override
+    public void quitGame() {
+        SoundEngine.sharedEngine().setEffectsVolume(0f);
+        SoundEngine.sharedEngine().setSoundVolume(0f);
+
+        CCDirector.sharedDirector().replaceScene(new TitleScreen().scene());
+    }
+
+    @Override
+    public void pauseGameAndShowLayer() {
+        if (Runner.check().isGamePlaying() && !Runner.check().isGamePaused()) {
+            this.pauseGame();
+        }
+
+        if (Runner.check().isGamePaused() && Runner.check().isGamePlaying() && this.pauseScreen == null) {
+            this.pauseScreen = new PauseScreen();
+            this.layerTop.addChild(this.pauseScreen);
+            this.pauseScreen.setDelegate(this);
+        }
+    }
+
+    private void pauseGame() {
+        if (!Runner.check().isGamePaused() && Runner.check().isGamePlaying()) {
+            SoundEngine.sharedEngine().pauseSound();
+            Runner.setIsGamePaused(true);
+        }
     }
 }
